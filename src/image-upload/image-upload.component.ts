@@ -22,6 +22,7 @@ export class FileHolder {
        [ngClass]="{'file-is-over': isFileOver}"
   >
     <div class="file-upload hr-inline-group">
+      <div class="drag-box-message">{{dropBoxMessage}}</div>
       <label class="upload-button">
         <span>{{buttonCaption}}</span>
         <input
@@ -30,7 +31,6 @@ export class FileHolder {
           multiple (change)="fileChange(input.files)"
           #input>
       </label>
-      <div class="drag-box-message">{{dropBoxMessage}}</div>
     </div>
   
     <div *ngIf="preview" class="image-container hr-inline-group" [dragula]='"first-bag"' [dragulaModel]='files'>
