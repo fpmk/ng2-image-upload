@@ -162,7 +162,7 @@ export class ImageUploadComponent implements OnInit {
     });
   }
 
-  private deleteFile(file: FileHolder): void {
+  public deleteFile(file: FileHolder): void {
     this.imageService.deleteImage(this.url, file.id, this.headers)
         .subscribe(res => {
           this.onRemove.emit(file);
