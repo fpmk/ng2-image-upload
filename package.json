@@ -1,5 +1,5 @@
 {
-  "name": "angular2-image-upload",
+  "name": "fpmk-angular2-image-upload",
   "version": "0.7.0",
   "description": "An angular component that uploads images using native browser upload or drag-n-drop.",
   "main": "index.js",
