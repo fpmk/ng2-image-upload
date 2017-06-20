@@ -58,7 +58,6 @@ export class ImageService {
     return this.http.delete(url, { params: { id: id }, headers: hs });
   }
 
-  // для получения base64 + добавление к оригинальному сервису
   public convertFileToDataURLviaFileReader(url, id?: string, headers?: Header[]) {
     return Observable.create(observer => {
       let xhr = new XMLHttpRequest();

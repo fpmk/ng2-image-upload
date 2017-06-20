@@ -18,7 +18,7 @@ export class FileHolder {
 })
 export class ImageUploadComponent implements OnInit {
 
-  @Input() uploaded: Array<Object>; // массив url фото, добавлено мной
+  @Input() uploaded: Array<Object>;
   @Input() icandelete: boolean = false;
 
   @Input() max: number = 100;
