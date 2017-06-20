@@ -3,10 +3,11 @@ import {ImageUploadComponent} from "./image-upload/image-upload.component";
 import {FileDropDirective} from "./file-drop.directive";
 import {CommonModule} from "@angular/common";
 import {ImageService} from "./image.service";
+import { DragulaModule } from 'ng2-dragula';
 
 
 @NgModule({
-  imports: [ CommonModule ],
+  imports: [ CommonModule, DragulaModule ],
   declarations: [
     ImageUploadComponent,
     FileDropDirective

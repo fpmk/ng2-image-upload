@@ -1,6 +1,6 @@
 <div class="image-upload"
      fileDrop
-     [accept]="supportedExtensions"    
+     [accept]="supportedExtensions"
      (isFileOver)="fileOver($event)"
      (fileDrop)="fileChange($event)"
      [ngClass]="{'file-is-over': isFileOver}"
@@ -24,7 +24,7 @@
   <p class="file-too-large" *ngIf="showFileTooLargeMessage" [innerText]="fileTooLargeMessage">
   </p>
 
-  <div *ngIf="preview" class="image-container hr-inline-group">
+  <div *ngIf="preview" class="image-container hr-inline-group" [dragula]='"first-bag"' [dragulaModel]='files'>
     <div
       class="image"
       *ngFor="let file of files"
