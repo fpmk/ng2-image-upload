@@ -4,3 +4,4 @@ node_modules/
 codegen/
 npm-debug.log
 *.tgz
+*.iml

@@ -1,10 +1,10 @@
 {
   "name": "fpmk-angular2-image-upload",
-  "version": "0.7.0",
+  "version": "0.7.3",
   "description": "An angular component that uploads images using native browser upload or drag-n-drop.",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf lib codegen && ngc -p src",
+    "build": "rimraf lib codegen && ngc -p ./src/tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -53,7 +53,6 @@
     "typescript": "2.2.2"
   },
   "dependencies": {
-    "ng2-drag-drop": "^2.0.1",
     "ng2-dragula": "^1.5.0"
   }
 }
