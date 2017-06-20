@@ -31,22 +31,12 @@
   color: #9b9b9b;
   font-weight: 600;
 }
-
-label.button input[type=file] {
+label.upload-button input[type=file] {
   display: none;
   position: fixed;
   top: -99999px;
 }
-
-.upload {
-  background-color: var(--active-color);
-}
-
-.clear {
-  background-color: #FF0000;
-}
-
-.button {
+.upload-button {
   cursor: pointer;
   background-color: var(--active-color);
   padding: 10px;
@@ -61,8 +51,7 @@ label.button input[type=file] {
   -moz-box-shadow: 2px 2px 4px 0px rgba(148, 148, 148, 0.6);
   box-shadow: 2px 2px 4px 0px rgba(148, 148, 148, 0.6);
 }
-
-.button:active span {
+.upload-button:active span{
   position: relative;
   display: block;
   top: 1px;
@@ -164,12 +153,6 @@ label.button input[type=file] {
   -webkit-animation: spinner 2s infinite cubic-bezier(0.085, 0.625, 0.855, 0.360);
   animation: spinner 2s infinite cubic-bezier(0.085, 0.625, 0.855, 0.360);
 }
-
-.file-too-large {
-  color: red;
-  padding: 0 15px;
-}
-
 @-webkit-keyframes spinner {
   0% {
     -webkit-transform: rotate(0deg);

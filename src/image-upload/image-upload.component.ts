@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Header, ImageService } from '../image.service';
 import { DragulaService } from 'ng2-dragula';
+import { Observable } from 'rxjs/Observable';
 
 export class FileHolder {
-  public serverResponse: { status: number, response: any };
+  public serverResponse: any;
   public pending: boolean = false;
 
-  constructor(public src: string, public file: File) {
+  constructor(private src: string, public file: File, public id?: string) {
   }
 }
 
@@ -16,6 +17,10 @@ export class FileHolder {
   styleUrls: [ './image-upload.component.css' ]
 })
 export class ImageUploadComponent implements OnInit {
+
+  @Input() uploaded: Array<Object>; // массив url фото, добавлено мной
+  @Input() icandelete: boolean = false;
+
   @Input() max: number = 100;
   @Input() url: string;
   @Input() headers: Header[];
@@ -25,13 +30,13 @@ export class ImageUploadComponent implements OnInit {
   @Input() partName: string;
 
   @Output()
-  isPending: EventEmitter<boolean> = new EventEmitter<boolean>();
+  private isPending: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output()
-  onFileUploadFinish: EventEmitter<FileHolder> = new EventEmitter<FileHolder>();
+  private onFileUploadFinish: EventEmitter<FileHolder> = new EventEmitter<FileHolder>();
   @Output()
-  onRemove: EventEmitter<FileHolder> = new EventEmitter<FileHolder>();
+  private onRemove: EventEmitter<FileHolder> = new EventEmitter<FileHolder>();
 
-  files: FileHolder[] = [];
+  public files: FileHolder[] = [];
   showFileTooLargeMessage: boolean = false;
 
   public fileCounter: number = 0;
@@ -56,6 +61,7 @@ export class ImageUploadComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.imageService.setUrl(this.url);
     if (!this.fileTooLargeMessage) {
       this.fileTooLargeMessage = 'An image was too large and was not uploaded.' + (this.maxFileSize
           ? (' The maximum file size is ' + this.maxFileSize / 1024) + 'KiB.'
@@ -64,6 +70,21 @@ export class ImageUploadComponent implements OnInit {
     if (this.supportedExtensions) {
       this.supportedExtensions = this.supportedExtensions.map((ext) => 'image/' + ext);
     }
+    if (typeof this.uploaded !== 'undefined')
+      if (this.uploaded.length > 0)
+        for (let i = 0; i < this.uploaded.length; i++) {
+          this.imageService.convertFileToDataURLviaFileReader(this.uploaded[ i ][ 'imageUrl' ],
+            this.uploaded[ i ][ 'id' ],
+            this.headers).subscribe(
+            response => {
+              let fileHolder: FileHolder = new FileHolder(response.image,
+                new File([ response.image ], 'file.jpg'),
+                response.id);
+              this.files.push(fileHolder);
+              this.max--;
+            }
+          );
+        }
   }
 
   fileChange(files: FileList) {
@@ -79,21 +100,9 @@ export class ImageUploadComponent implements OnInit {
     this.uploadFiles(files, filesToUploadNum);
   }
 
-  deleteFile(file: FileHolder): void {
-
-    let index = this.files.indexOf(file);
-    this.files.splice(index, 1);
-    this.fileCounter--;
-    this.onRemove.emit(file);
-  }
-
   deleteAll() {
     this.files = [];
     this.fileCounter = 0;
-  }
-
-  fileOver(isOver) {
-    this.isFileOver = isOver;
   }
 
   private uploadFiles(files: FileList, filesToUploadNum: number) {
@@ -112,7 +121,13 @@ export class ImageUploadComponent implements OnInit {
       reader.addEventListener('load', (event: any) => {
         let fileHolder: FileHolder = new FileHolder(event.target.result, file);
 
-        this.uploadSingleFile(fileHolder);
+        fileHolder.serverResponse = `good boy: ${i}`;
+
+        this.uploadSingleFile(fileHolder).subscribe(data => {
+          if (data.result === 'ok') {
+            fileHolder.id = data.response.id;
+          }
+        });
 
         this.files.push(fileHolder);
 
@@ -122,37 +137,50 @@ export class ImageUploadComponent implements OnInit {
     }
   }
 
-  private onResponse(response, fileHolder: FileHolder) {
-    fileHolder.serverResponse = response;
-    fileHolder.pending = false;
+  private uploadSingleFile(fileHolder: FileHolder) {
+    return Observable.create(observer => {
+      if (this.url) {
+        this.pendingFilesCounter++;
+        fileHolder.pending = true;
 
-    this.onFileUploadFinish.emit(fileHolder);
+        this.imageService.postImage(fileHolder.file, this.headers).subscribe(response => {
+          fileHolder.serverResponse = response;
+          this.onFileUploadFinish.emit(fileHolder);
+          fileHolder.pending = false;
+          if (--this.pendingFilesCounter == 0) {
+            this.isPending.emit(false);
+          }
+          observer.next({ 'result': 'ok', 'response': JSON.parse(response) });
+          observer.complete();
+        });
 
-    if (--this.pendingFilesCounter == 0) {
-      this.isPending.emit(false);
-    }
+      } else {
+        this.onFileUploadFinish.emit(fileHolder);
+        observer.next({ 'result': 'error' });
+        observer.complete();
+      }
+    });
   }
 
-  private uploadSingleFile(fileHolder: FileHolder) {
-    if (this.url) {
-      this.pendingFilesCounter++;
-      fileHolder.pending = true;
+  private deleteFile(file: FileHolder): void {
+    this.imageService.deleteImage(this.url, file.id, this.headers)
+        .subscribe(res => {
+          this.onRemove.emit(file);
+          let index = this.files.indexOf(file);
+          this.files.splice(index, 1);
+          this.fileCounter--;
+        });
+  }
 
-      this.imageService
-          .postImage(this.url, fileHolder.file, this.headers, this.partName, this.withCredentials)
-          .subscribe(
-            response => this.onResponse(response, fileHolder),
-            error => {
-              this.onResponse(error, fileHolder);
-              this.deleteFile(fileHolder);
-            }
-          );
-    } else {
-      this.onFileUploadFinish.emit(fileHolder);
-    }
+  fileOver(isOver) {
+    this.isFileOver = isOver;
   }
 
   private countRemainingSlots() {
     return this.max - this.fileCounter;
+  }
+
+  get value(): any[] {
+    return this.files;
   }
 }
