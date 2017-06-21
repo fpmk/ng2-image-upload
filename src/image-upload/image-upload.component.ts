@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Header, ImageService } from '../image.service';
 import { DragulaService } from 'ng2-dragula';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/from';
 
 export class FileHolder {
   public serverResponse: any;
@@ -15,12 +16,12 @@ export class FileHolder {
   selector: 'image-upload',
   template: `
     <div class="image-upload"
-       fileDrop
-       [accept]="['image/*']"
-       (isFileOver)="fileOver($event)"
-       (fileDrop)="fileChange($event)"
-       [ngClass]="{'file-is-over': isFileOver}"
-  >
+         fileDrop
+         [accept]="['image/*']"
+         (isFileOver)="fileOver($event)"
+         (fileDrop)="fileChange($event)"
+         [ngClass]="{'file-is-over': isFileOver}"
+    >
     <div class="file-upload hr-inline-group">
       <div class="drag-box-message">{{dropBoxMessage}}</div>
       <label class="upload-button">
@@ -36,7 +37,7 @@ export class FileHolder {
     <div *ngIf="preview" class="image-container hr-inline-group" [dragula]='"first-bag"' [dragulaModel]='files'>
       <div
         class="image"
-        *ngFor="let file of files"
+        *ngFor="let file of files" [id]="file.id"
         [ngStyle]="{'background-image': 'url('+ file.src +')'}"
       >
         <div *ngIf="file.pending" class="loading-overlay">
@@ -50,7 +51,7 @@ export class FileHolder {
   </div>
   `,
   styles: [
-    `
+      `
       .image-upload {
         --common-radius: 3px;
         --active-color: #33CC99;
@@ -59,23 +60,23 @@ export class FileHolder {
         border: #d0d0d0 dashed 1px;
         font-family: sans-serif;
       }
-      
+
       .file-is-over {
         border-color: var(--active-color);
         border-style: solid;
       }
-      
+
       .hr-inline-group:after {
         display: table;
         clear: both;
         content: "";
       }
-      
+
       .file-upload {
         padding: 16px;
         background-color: #f8f8f8;
       }
-      
+
       .drag-box-message {
         float: left;
         display: inline-block;
@@ -84,11 +85,13 @@ export class FileHolder {
         color: #9b9b9b;
         font-weight: 600;
       }
+
       label.upload-button input[type=file] {
         display: none;
         position: fixed;
         top: -99999px;
       }
+
       .upload-button {
         cursor: pointer;
         background-color: var(--active-color);
@@ -99,22 +102,23 @@ export class FileHolder {
         text-transform: uppercase;
         display: inline-block;
         float: left;
-      
+
         -webkit-box-shadow: 2px 2px 4px 0px rgba(148, 148, 148, 0.6);
         -moz-box-shadow: 2px 2px 4px 0px rgba(148, 148, 148, 0.6);
         box-shadow: 2px 2px 4px 0px rgba(148, 148, 148, 0.6);
       }
-      .upload-button:active span{
+
+      .upload-button:active span {
         position: relative;
         display: block;
         top: 1px;
       }
-      
+
       .image-container {
         background-color: #fdfdfd;
         padding: 0 10px 0 10px;
       }
-      
+
       .image {
         cursor: move; /* fallback if grab cursor is unsupported */
         cursor: grab;
@@ -127,7 +131,7 @@ export class FileHolder {
         background-size: contain;
         position: relative;
       }
-      
+
       .x-mark {
         width: 20px;
         height: 20px;
@@ -149,7 +153,7 @@ export class FileHolder {
         -o-transform: translateY(-50%);
         transform: translateY(-50%);
       }
-      
+
       .close {
         width: 20px;
         height: 20px;
@@ -157,11 +161,11 @@ export class FileHolder {
         position: relative;
         padding-right: 3px;
       }
-      
+
       .x-mark:hover .close {
         opacity: 1;
       }
-      
+
       .close:before, .close:after {
         border-radius: 2px;
         position: absolute;
@@ -171,15 +175,15 @@ export class FileHolder {
         top: 2px;
         background-color: #FFFFFF;
       }
-      
+
       .close:before {
         transform: rotate(45deg);
       }
-      
+
       .close:after {
         transform: rotate(-45deg);
       }
-      
+
       .loading-overlay {
         position: absolute;
         top: 0;
@@ -189,7 +193,7 @@ export class FileHolder {
         background-color: black;
         opacity: .7;
       }
-      
+
       .spinningCircle {
         height: 30px;
         width: 30px;
@@ -206,6 +210,7 @@ export class FileHolder {
         -webkit-animation: spinner 2s infinite cubic-bezier(0.085, 0.625, 0.855, 0.360);
         animation: spinner 2s infinite cubic-bezier(0.085, 0.625, 0.855, 0.360);
       }
+
       @-webkit-keyframes spinner {
         0% {
           -webkit-transform: rotate(0deg);
@@ -216,7 +221,7 @@ export class FileHolder {
           transform: rotate(360deg);
         }
       }
-      
+
       @keyframes spinner {
         0% {
           -webkit-transform: rotate(0deg);
@@ -225,10 +230,10 @@ export class FileHolder {
         100% {
           -webkit-transform: rotate(360deg);
           transform: rotate(360deg);
-      
+
         }
       }
-      
+
       .gu-mirror {
         cursor: grabbing !important;
         cursor: -moz-grabbing !important;
@@ -240,24 +245,24 @@ export class FileHolder {
         -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
         filter: alpha(opacity=80)
       }
-      
+
       .gu-hide {
         display: none !important
       }
-      
+
       .gu-unselectable {
         -webkit-user-select: none !important;
         -moz-user-select: none !important;
         -ms-user-select: none !important;
         user-select: none !important
       }
-      
+
       .gu-transit {
         opacity: .2;
         -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
         filter: alpha(opacity=20)
       }
-    `
+      `
   ]
   // templateUrl: './image-upload.component.html',
   // styleUrls: [ './image-upload.component.css' ]
@@ -279,6 +284,8 @@ export class ImageUploadComponent implements OnInit {
   private isPending: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output()
   private onFileUploadFinish: EventEmitter<FileHolder> = new EventEmitter<FileHolder>();
+  @Output()
+  private onOrderChanged: EventEmitter<string[]> = new EventEmitter<string[]>();
   @Output()
   private onRemove: EventEmitter<FileHolder> = new EventEmitter<FileHolder>();
 
@@ -303,6 +310,14 @@ export class ImageUploadComponent implements OnInit {
               private dragulaService: DragulaService) {
     dragulaService.setOptions('first-bag', {
       direction: 'horizontal'
+    });
+    dragulaService.drop.subscribe((value) => {
+      let values = value.slice(1);
+      let arr = [];
+      for(let i in values){
+        arr.push(values[i].id);
+      }
+      this.onOrderChanged.emit(arr);
     });
   }
 

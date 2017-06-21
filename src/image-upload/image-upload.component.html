@@ -20,7 +20,7 @@
   <div *ngIf="preview" class="image-container hr-inline-group" [dragula]='"first-bag"' [dragulaModel]='files'>
     <div
       class="image"
-      *ngFor="let file of files"
+      *ngFor="let file of files" [id]="file.id"
       [ngStyle]="{'background-image': 'url('+ file.src +')'}"
     >
       <div *ngIf="file.pending" class="loading-overlay">
