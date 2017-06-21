@@ -311,12 +311,12 @@ export class ImageUploadComponent implements OnInit {
     dragulaService.setOptions('first-bag', {
       direction: 'horizontal'
     });
-    dragulaService.drop.subscribe((value) => {
-      let values = value.slice(1);
+    dragulaService.dropModel.subscribe((value) => {
       let arr = [];
-      for(let i in values){
-        arr.push(values[i].id);
+      for(let i in this.files){
+        arr.push(this.files[i].id);
       }
+      console.log(arr);
       this.onOrderChanged.emit(arr);
     });
   }
@@ -339,7 +339,7 @@ export class ImageUploadComponent implements OnInit {
             this.headers).subscribe(
             response => {
               let fileHolder: FileHolder = new FileHolder(response.image,
-                new File([ response.image ], 'file.jpg'),
+                new File([ response.image ], response.id),
                 response.id);
               this.files.push(fileHolder);
               this.max--;
