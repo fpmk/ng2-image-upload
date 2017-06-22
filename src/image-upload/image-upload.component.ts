@@ -285,6 +285,8 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
   @Output()
   private onFileUploadFinish: EventEmitter<FileHolder> = new EventEmitter<FileHolder>();
   @Output()
+  private onFilesUploadFinish: EventEmitter<FileHolder[]> = new EventEmitter<FileHolder[]>();
+  @Output()
   private onOrderChanged: EventEmitter<string[]> = new EventEmitter<string[]>();
   @Output()
   private onRemove: EventEmitter<FileHolder> = new EventEmitter<FileHolder>();
@@ -371,6 +373,7 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
   }
 
   private uploadFiles(files: FileList, filesToUploadNum: number) {
+    let uploadedFilesCount = 0;
     for (let i = 0; i < filesToUploadNum; i++) {
       let file = files[ i ];
 
@@ -391,6 +394,10 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
         this.uploadSingleFile(fileHolder).subscribe(data => {
           if (data.result === 'ok') {
             fileHolder.id = data.response.id;
+            uploadedFilesCount++;
+            if (uploadedFilesCount === filesToUploadNum) {
+              this.onFilesUploadFinish.emit(this.files);
+            }
           }
         });
 
