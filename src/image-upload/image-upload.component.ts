@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Header, ImageService } from '../image.service';
 import { DragulaService } from 'ng2-dragula';
 import { Observable } from 'rxjs/Observable';
@@ -267,7 +267,7 @@ export class FileHolder {
   // templateUrl: './image-upload.component.html',
   // styleUrls: [ './image-upload.component.css' ]
 })
-export class ImageUploadComponent implements OnInit {
+export class ImageUploadComponent implements OnInit, OnDestroy {
 
   @Input() uploaded: Array<Object>;
   @Input() icandelete: boolean = false;
@@ -319,6 +319,10 @@ export class ImageUploadComponent implements OnInit {
       console.log(arr);
       this.onOrderChanged.emit(arr);
     });
+  }
+
+  ngOnDestroy() {
+    this.dragulaService.destroy('first-bag');
   }
 
   ngOnInit() {
