@@ -340,6 +340,9 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
     if (typeof this.uploaded !== 'undefined')
       if (this.uploaded.length > 0)
         for (let i = 0; i < this.uploaded.length; i++) {
+          if (!this.uploaded[ i ][ 'imageUrl' ]) {
+            continue;
+          }
           this.imageService.convertFileToDataURLviaFileReader(this.uploaded[ i ][ 'imageUrl' ],
             this.uploaded[ i ][ 'id' ],
             this.headers).subscribe(
@@ -349,7 +352,8 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
                 response.id);
               this.files.push(fileHolder);
               this.max--;
-            }
+            },
+            error => console.warn(error)
           );
         }
   }

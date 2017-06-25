@@ -68,7 +68,9 @@ export class ImageService {
           observer.next({ 'image': reader.result, id: id });
           observer.complete();
         };
-        reader.readAsDataURL(xhr.response);
+        if (xhr.response != null) {
+          reader.readAsDataURL(xhr.response);
+        }
       };
       xhr.open('GET', url);
 
