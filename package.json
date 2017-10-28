@@ -1,6 +1,6 @@
 {
   "name": "fpmk-angular2-image-upload",
-  "version": "0.7.18",
+  "version": "0.8.0",
   "description": "An angular component that uploads images using native browser upload or drag-n-drop.",
   "main": "index.js",
   "scripts": {
@@ -31,26 +31,26 @@
   },
   "homepage": "https://github.com/aberezkin/image-upload#readme",
   "peerDependencies": {
-    "@angular/core": "^4.2.3",
-    "@angular/common": "^4.2.3",
-    "@angular/http": "^4.2.3",
+    "@angular/core": "^4.4.6",
+    "@angular/common": "^4.4.6",
+    "@angular/http": "^4.4.6",
     "rxjs": "~5.4.0"
   },
   "devDependencies": {
     "@angular/cli": "^1.1.2",
-    "@angular/common": "^4.2.3",
-    "@angular/compiler": "^4.2.3",
-    "@angular/compiler-cli": "^4.2.3",
-    "@angular/core": "^4.2.3",
-    "@angular/forms": "^4.2.3",
-    "@angular/http": "^4.2.3",
-    "@angular/language-service": "^4.2.3",
-    "@angular/platform-browser": "^4.2.3",
-    "@angular/platform-browser-dynamic": "^4.2.3",
-    "@angular/router": "^4.2.3",
-    "@types/core-js": "^0.9.34",
-    "rxjs": "~5.4.0",
-    "typescript": "2.2.2"
+    "@angular/common": "^4.4.6",
+    "@angular/compiler": "^4.4.6",
+    "@angular/compiler-cli": "^4.4.6",
+    "@angular/core": "^4.4.6",
+    "@angular/forms": "^4.4.6",
+    "@angular/http": "^4.4.6",
+    "@angular/language-service": "^4.4.6",
+    "@angular/platform-browser": "^4.4.6",
+    "@angular/platform-browser-dynamic": "^4.4.6",
+    "@angular/router": "^4.4.6",
+    "@types/core-js": "^0.9.43",
+    "rxjs": "~5.5.2",
+    "typescript": "2.5.3"
   },
   "dependencies": {
     "ng2-dragula": "^1.5.0"
