@@ -6,18 +6,18 @@
     "target": "es5",
     "module": "commonjs",
     "removeComments": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "../lib",
     "declaration": true,
-    "typeRoots": [
-      "../node_modules/@types"
-    ],
     "lib": [
       "es2016",
       "dom"
     ]
   },
   "angularCompilerOptions": {
-    "genDir": "../codegen"
-  }
+    "genDir": "../.tmp/ngc"
+  },
+  "include": [
+    "../.tmp/**/*"
+  ]
 }
