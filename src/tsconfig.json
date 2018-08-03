@@ -15,9 +15,9 @@
     ]
   },
   "angularCompilerOptions": {
-    "genDir": "../.tmp/ngc"
+    "genDir": "../dist/ngc"
   },
   "include": [
-    "../.tmp/**/*"
+    "../dist/**/*"
   ]
 }

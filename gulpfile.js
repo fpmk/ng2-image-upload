@@ -7,7 +7,7 @@ gulp.task('ngc', () => ngc(['--p', 'src/tsconfig.json']));
 gulp.task('inline-templates', () => {
   return gulp.src('src/**/*.ts')
              .pipe(inlineNg2Template({base: 'src', useRelativePaths: true}))
-             .pipe(gulp.dest('.tmp'));
+             .pipe(gulp.dest('dist'));
 });
 
 gulp.task('copy-to-demo', () => {
