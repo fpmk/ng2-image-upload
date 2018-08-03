@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Headers, Http, Response } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 export interface Header {
   header: string;
@@ -11,7 +11,7 @@ export interface Header {
 export class ImageService {
   private url: string;
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
   }
 
   public setUrl(url: string) {
@@ -51,11 +51,11 @@ export class ImageService {
 
   public deleteImage(url: string, id: string, headers?: Header[]): Observable<Response> {
     this.checkUrl();
-    let hs: Headers = new Headers();
+    let hs: HttpHeaders = new HttpHeaders();
     for (let header of headers) {
       hs.append(header.header, header.value);
     }
-    return this.http.delete(url, { params: { id: id }, headers: hs });
+    return this.http.delete<Response>(url, { params: { id: id }, headers: hs });
   }
 
   public convertFileToDataURLviaFileReader(url, id?: string, headers?: Header[]) {

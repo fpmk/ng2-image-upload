@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Header, ImageService } from '../image.service';
 import { DragulaService } from 'ng2-dragula';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
+import { Observable } from 'rxjs';
 
 export class FileHolder {
   public serverResponse: any;
@@ -60,13 +60,13 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
 
   constructor(private imageService: ImageService,
               private dragulaService: DragulaService) {
-    dragulaService.setOptions('first-bag', {
+    dragulaService.createGroup('first-bag', {
       direction: 'horizontal'
     });
-    dragulaService.dropModel.subscribe((value) => {
+    dragulaService.dropModel('first-bag').subscribe((value) => {
       let arr = [];
-      for(let i in this.files){
-        arr.push(this.files[i].id);
+      for (let i in this.files) {
+        arr.push(this.files[ i ].id);
       }
       console.log(arr);
       this.onOrderChanged.emit(arr);
@@ -81,8 +81,9 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
     this.imageService.setUrl(this.url);
     if (!this.fileTooLargeMessage) {
       this.fileTooLargeMessage = 'An image was too large and was not uploaded.' + (this.maxFileSize
-          ? (' The maximum file size is ' + this.maxFileSize / 1024) + 'KiB.'
-          : '');
+                                                                                   ? (' The maximum file size is ' +
+                                 this.maxFileSize / 1024) + 'KiB.'
+                                                                                   : '');
     }
     if (this.supportedExtensions) {
       this.supportedExtensions = this.supportedExtensions.map((ext) => 'image/' + ext);
