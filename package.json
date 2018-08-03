@@ -1,12 +1,12 @@
 {
   "name": "fpmk-ngx-image-upload",
-  "version": "0.8.8",
+  "version": "0.9.0",
   "description": "An angular component that uploads images using native browser upload or drag-n-drop.",
   "main": "index.js",
   "scripts": {
     "build": "rimraf -rf lib .tmp demo/src/lib && gulp build",
     "release": "npm run build && npm run build:demo && git add docs && standard-version --commit-all",
-    "publish": "git push --follow-tags origin master && npm publish",
+    "publish": "npm publish",
     "install:demo": "cd demo && yarn",
     "demo": "cd demo && npm start",
     "build:demo": "cd demo && npm run build"
