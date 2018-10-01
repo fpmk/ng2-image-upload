@@ -18,6 +18,6 @@
     "genDir": "../dist/ngc"
   },
   "include": [
-    "../lib/**/*"
+    "../lib/dist/**/*"
   ]
 }
