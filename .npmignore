@@ -1,6 +1,13 @@
-src
 node_modules
 .idea
-codegen
 .editorconfig
 *.tgz
+.tmp/
+gulpfile.js
+package-lock.json
+yarn.lock
+src/tsconfig.json
+.npmignore
+demo/
+docs/
+.travis.yml

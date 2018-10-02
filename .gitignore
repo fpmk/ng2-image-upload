@@ -1,7 +1,7 @@
 lib/
 node_modules/
 .idea/
-codegen/
 npm-debug.log
 *.tgz
-*.iml
+.tmp/
+package-lock.json
